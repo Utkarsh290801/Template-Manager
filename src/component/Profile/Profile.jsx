@@ -71,9 +71,16 @@ const Profile = () => {
             </> */}
             {appliedStatus !== null ? (
               <>
-                <p>
-                  Applied Status: Applied on <span>{appliedStatus}</span>
-                </p>
+                {appliedStatus.map((status, index) => (
+                  <div key={index}>
+                    {" "}
+                    <span style={{ fontWeight: "bold" }}>
+                      {" "}
+                      Applied on :-{" "}
+                    </span>{" "}
+                    {status}
+                  </div>
+                ))}
               </>
             ) : (
               <p>Applied Status: Not applied</p>

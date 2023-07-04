@@ -10,8 +10,30 @@ const Services = ({ filter }) => {
     console.log(data);
     setServices(data);
   };
-  const handleApply = (serviceId) => {
-    window.location.href = `/user/apply/${serviceId}`;
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(sessionStorage.getItem("user"))
+  );
+
+  const handleApply = async (serviceId) => {
+    
+    const response = await fetch("http://localhost:5000/apply/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user: currentUser }),
+    });
+
+    const result = await response.json();
+    console.log(result);
+
+    // Handle the result and show appropriate message to the user
+    if (result.message) {
+      alert(result.message);
+    } else {
+      // Navigate to the user's application page
+      window.location.href = `/user/apply/${serviceId}`;
+    }
   };
 
   useEffect(() => {

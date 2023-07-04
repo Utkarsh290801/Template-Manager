@@ -30,7 +30,7 @@ const Sidebar = ({ setTitle }) => {
               to="/"
             >
               <FontAwesomeIcon icon={faUserCircle} className="iconC" />
-             Home
+              Home
             </NavLink>
           </li>
           <li>
@@ -42,6 +42,17 @@ const Sidebar = ({ setTitle }) => {
             >
               <FontAwesomeIcon icon={faUserCircle} className="iconC" />
               Profile
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              onClick={() => setTitle("Profile")}
+              activeclassname="activePage"
+              exact
+              to="/user/service"
+            >
+              <FontAwesomeIcon icon={faUserCircle} className="iconC" />
+              Internship Domain
             </NavLink>
           </li>
 
