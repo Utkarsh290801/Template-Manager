@@ -1,12 +1,13 @@
-import React from 'react'
+import React from 'react';
 import NotFoundImg from '../../Assets/images/404.svg';
+import './NotFound.css';
 
 const NotFound = () => {
-    return (
-        <div className="d-flex justify-content-center align-items-center">
-        <img src={`${NotFoundImg}`} alt="" style={{height: '80vh', padding: '2rem 0 0 0'}}/>
+  return (
+    <div className="not-found-container">
+      <img src={NotFoundImg} alt="" className="not-found-image" />
     </div>
-    )
-}
+  );
+};
 
-export default NotFound
+export default NotFound;

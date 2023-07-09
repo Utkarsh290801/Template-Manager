@@ -10,7 +10,7 @@ import { AppContext } from "../../context/AppContext";
 const SignInForm = () => {
   const { setloggedIn } = useContext(AppContext);
   const navigate = useNavigate();
-
+  const url = "http://localhost:5000";
   const loginform = {
     email: "",
     password: "",
@@ -22,53 +22,72 @@ const SignInForm = () => {
   });
   // ...
 
-  const loginSubmit = async (formdata) => {
-    const response = await fetch("http://localhost:5000/user/authenticate", {
-      method: "POST",
-      body: JSON.stringify(formdata),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.status === 200) {
-      console.log(response.status);
-      console.log("success");
-      Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: "Login Success!!👍",
+  const loginSubmit = async (formdata, { setSubmitting }) => {
+    setSubmitting(true);
+  
+    // Check if email exists
+    const res = await fetch(url + "/user/checkemail/" + formdata.email);
+    if (res.status === 200) {
+      // Email exists, proceed with login
+      const response = await fetch("http://localhost:5000/user/authenticate", {
+        method: "POST",
+        body: JSON.stringify(formdata),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-      const data = await response.json();
-      console.log(data);
-      setloggedIn(true);
-      if (data.isAdmin) {
-        sessionStorage.setItem("admin", JSON.stringify(data));
-        navigate("/admin/addservice");
+  
+      if (response.status === 200) {
+        // Login success
+        console.log(response.status);
+        console.log("success");
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Login Success!!👍",
+        });
+        const data = await response.json();
+        console.log(data);
+        setloggedIn(true);
+        if (data.isAdmin) {
+          sessionStorage.setItem("admin", JSON.stringify(data));
+          navigate("/admin/addservice");
+        } else {
+          navigate("/");
+          sessionStorage.setItem("user", JSON.stringify(data));
+        }
+      } else if (response.status === 401) {
+        // Authentication failed
+        console.log(response.status);
+        console.log("authentication failed");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Invalid email or password",
+        });
       } else {
-        navigate("/");
-        sessionStorage.setItem("user", JSON.stringify(data));
+        // Other error cases
+        console.log(response.status);
+        console.log("something went wrong");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Login Failed",
+        });
       }
-    } else if (response.status === 401) {
-      // Authentication failed
-      console.log(response.status);
-      console.log("authentication failed");
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Invalid email or password",
-      });
     } else {
-      // Other error cases
-      console.log(response.status);
-      console.log("something went wrong");
+      // Email does not exist
+      console.log(res.status);
+      console.log("email does not exist");
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Login Failed",
+        text: "Create Your Account First",
       });
     }
+    setSubmitting(false);
   };
+  
 
   // ...
 

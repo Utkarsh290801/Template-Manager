@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -18,6 +18,8 @@ import ListItemText from "@mui/material/ListItemText";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Tooltip } from "@mui/material";
 import { Home } from "@mui/icons-material";
+import { AppContext } from "../../context/AppContext";
+import { Avatar, Button, Menu, MenuItem } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -88,11 +90,44 @@ const Drawer = styled(MuiDrawer, {
 
 // Change Here
 export default function Sidebar({ children, options, title }) {
+  const settings = [
+    { name: "Profile", link: "/user/userrprofile" },
+    // { name: "Account", link: "/user/accounts" },
+    // { name: "Logout", link: "/" },
+  ];
+  const { loggedIn, setloggedIn } = useContext(AppContext);
+  useEffect(() => {
+    const checkSession = () => {
+      const adminData = JSON.parse(sessionStorage.getItem("admin"));
+      const userData = JSON.parse(sessionStorage.getItem("user"));
+      if (adminData || userData) {
+        setloggedIn(true);
+      } else {
+        setloggedIn(false);
+      }
+    };
+
+    checkSession();
+  }, [setloggedIn]);
+  const [anchorElUser, setAnchorElUser] = useState(null);
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
   const navigate = useNavigate();
-
+  const logout = () => {
+    //1.destroy session value
+    sessionStorage.removeItem("admin");
+    //2. set the current user to null
+    setloggedIn(false);
+    //3.navigate to login page
+    navigate("/login");
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -100,7 +135,16 @@ export default function Sidebar({ children, options, title }) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const boxSX = {
+    "&:hover": {
+      color: "black",
+      backgroundColor: "#b1b0b9",
+    },
+  };
 
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(sessionStorage.getItem("user"))
+  );
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -132,6 +176,58 @@ export default function Sidebar({ children, options, title }) {
                 <Home />
               </IconButton>
             </Tooltip>
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            {/* <Button
+              size="large"
+              sx={{ ml: 1, ...boxSX }}
+              color="inherit"
+              onClick={(e) => navigate("/user/webb")}
+            >
+              Builder
+            </Button> */}
+          </Box>
+
+          {!loggedIn ? (
+            <li className="nav">
+              <NavLink className="btn btn-primary m-3" to="/login">
+                Login Now
+              </NavLink>
+            </li>
+          ) : (
+            <NavLink onClick={logout} className="btn btn-danger m-3" to="/">
+              Logout
+            </NavLink>
+          )}
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="" src="" />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map(({ name, link }) => (
+                <MenuItem key={name} onClick={(e) => navigate(link)}>
+                  <Typography textAlign="center">{name}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
           </Box>
         </Toolbar>
       </AppBar>
@@ -182,6 +278,7 @@ export default function Sidebar({ children, options, title }) {
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
+                ...boxSX,
               }}
             >
               <ListItemIcon
@@ -189,6 +286,7 @@ export default function Sidebar({ children, options, title }) {
                   minWidth: 0,
                   mr: open ? 3 : "auto",
                   justifyContent: "center",
+                  color: "inherit",
                 }}
               >
                 {icon}

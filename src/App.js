@@ -16,6 +16,7 @@ import User from "./component/User";
 import Contact from "./component/User/Contact/Contact";
 import About from "./component/About/About";
 import Admin from "./component/Admin";
+import UserManager from "./component/Admin/UserManager";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(
@@ -37,6 +38,8 @@ function App() {
               }
               path="admin"
             >
+              
+              <Route element={<UserManager />} path="manageuser" />
               <Route element={<ServiceForm />} path="addservice" />
             </Route>
             <Route path="reset" element={<ResetPassword />} />

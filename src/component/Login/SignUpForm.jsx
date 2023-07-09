@@ -5,8 +5,6 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
-import SocialMedia from "./SocialMedia";
-import SignInForm from "./SignInForm";
 
 const SignUpForm = ({ onSignUpSuccess }) => {
   const url = "http://localhost:5000";
@@ -31,6 +29,14 @@ const SignUpForm = ({ onSignUpSuccess }) => {
       const data = await response.json();
       // console.log("data saved");
       console.log("success");
+      const response2 = await fetch("http://localhost:5000/apply/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user: data._id }),
+      });
+      if (response2.status === 200) console.log("Apply created");
       Swal.fire({
         icon: "success",
         title: "Well Done",

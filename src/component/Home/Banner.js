@@ -8,6 +8,7 @@ import Contact from "../User/Contact/Contact";
 import About from "../About/About";
 
 import Services from "../User/Services/Services";
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
 
 const Banner = () => {
   const [filter, setFilter] = useState("");
@@ -60,6 +61,7 @@ const Banner = () => {
           <Contact />
           <BuildTools />
           <Footer />
+          <ScrollToTop/>
         </div>
       )}
     </div>
