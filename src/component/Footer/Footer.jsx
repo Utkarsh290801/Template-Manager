@@ -49,7 +49,7 @@ const Footer = () => {
                 </Col>
                 <FooterCol key="2" menuItems={usefulLink} title="USEFUL LINK"/>
                 <FooterCol key="3" menuItems={ourServices} title="OUR SERVICES"/>
-                <FooterCol key="4" menuItems={otherLinks} title="OTHER LINKS"/>
+                <FooterCol key="4" menuItems={otherLinks} title="OTHER LINKS" />
             </Row>
             <p className="copyRight">Copyright &copy; 2023 <span className="fHighlight">Utkarsh Arora</span>. All rights reserved.</p>
         </section>

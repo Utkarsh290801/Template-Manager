@@ -74,20 +74,20 @@ const Navbar = ({ setFilter }) => {
                 <li className="nav-item ">
                   <a
                     href="#about"
-                    style={{ color: "#7355F7" }}
+                    style={{ color: "#7355F7" ,fontWeight:"bold"}}
                     className="d-none d-sm-block"
                   >
                     &nbsp; &nbsp;About Us &nbsp; &nbsp;
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a href="#services" style={{ color: "#7355F7" }}>
+                  <a href="#services" style={{ color: "#7355F7",fontWeight:"bold" }}>
                     Internship Domain{" "}
                   </a>
                 </li>
 
                 <li className="nav-item">
-                  <a href="#contact" style={{ color: "#7355F7" }}>
+                  <a href="#contact" style={{ color: "#7355F7" ,fontWeight:"bold"}}>
                     {" "}
                     &nbsp; &nbsp;Contact Us &nbsp; &nbsp;
                   </a>
@@ -95,7 +95,7 @@ const Navbar = ({ setFilter }) => {
                 {loggedIn ? (
                   <>
                     <li className="nav-item">
-                      <NavLink to="/dashboard/profile">Dashboard</NavLink>
+                      <NavLink to="/dashboard/profile" style={{ color: "#7355F7" ,fontWeight:"bold"}} >Dashboard</NavLink>
                     </li>
                   </>
                 ) : null}

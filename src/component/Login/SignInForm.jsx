@@ -42,8 +42,13 @@ const SignInForm = () => {
       const data = await response.json();
       console.log(data);
       setloggedIn(true);
-      navigate("/");
-      sessionStorage.setItem("user", JSON.stringify(data));
+      if (data.isAdmin) {
+        sessionStorage.setItem("admin", JSON.stringify(data));
+        navigate("/admin/addservice");
+      } else {
+        navigate("/");
+        sessionStorage.setItem("user", JSON.stringify(data));
+      }
     } else if (response.status === 401) {
       // Authentication failed
       console.log(response.status);
@@ -120,7 +125,9 @@ const SignInForm = () => {
               {errors.password && touched.password && errors.password}
             </p>
             {/* {errors.password && <span className="text-warning">This field is required</span>} */}
-            <p className="social-text "> Forgot your password?
+            <p className="social-text ">
+              {" "}
+              Forgot your password?
               <NavLink to="/reset"> Reset now</NavLink>
             </p>
             <input className="iBtn" type="submit" value="sign In" />

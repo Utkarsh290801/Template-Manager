@@ -18,16 +18,15 @@ const PopOver = () => {
     setTarget(event.target);
   };
   const logout = () => {
-    //destroy session value
     sessionStorage.removeItem("user");
-    //  setloggedIn to false
+    sessionStorage.removeItem("admin");
     setloggedIn(false);
-    //  navigate to login page
     navigate("/login");
   };
-  const [currentUser, setCurrentUser] = useState(
-    JSON.parse(sessionStorage.getItem("user"))
-  );
+
+  const currentUserData = sessionStorage.getItem("user");
+  const currentUser = currentUserData ? JSON.parse(currentUserData) : null;
+
   return (
     <>
       <img
@@ -52,8 +51,8 @@ const PopOver = () => {
                   alt=""
                   className="popUserImg"
                 />
-                <p className="userName">{currentUser.username}</p>
-                <p className="userEmail">{currentUser.email}</p>
+                <p className="userName">{currentUser?.username}</p>
+                <p className="userEmail">{currentUser?.email}</p>
                 <Button variant="outline-danger" size="sm" onClick={logout}>
                   Log out
                 </Button>

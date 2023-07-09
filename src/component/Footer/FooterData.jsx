@@ -16,8 +16,8 @@ export const ourServices = [
     {name: 'Graphic Design', id: 10}
 ]
 export const otherLinks = [
-    {name: 'FAQ', id: 11},
-    {name: 'Portfolio', id: 12},
+    {name: 'FAQ', id: 11,},
+    {name: 'Admin Login', id: 12,link:'/admin/addservice'},
     {name: 'Privacy Policy', id: 13},
     {name: 'Terms & Conditions', id: 14},
     {name: 'Support', id: 15},

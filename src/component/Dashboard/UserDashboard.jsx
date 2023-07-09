@@ -7,6 +7,7 @@ import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Profile from "../Profile/Profile";
 import TaskSubmission from "../Task/TaskSubmission";
+import EditProfile from "../EditProfile/EditProfile";
 
 const UserDashboard = () => {
   const [sideToggle, setSideToggle] = useState(false);
@@ -49,6 +50,7 @@ const UserDashboard = () => {
 
         <Routes>
           <Route path="/profile" element={<Profile />} />
+          <Route path="/edit" element={<EditProfile />} />
           <Route path="/submission" element={<TaskSubmission />} />
         </Routes>
 

@@ -8,7 +8,7 @@ const ServiceForm = () => {
   const url = "http://localhost:5000";
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(
-    JSON.parse(sessionStorage.getItem("user"))
+    JSON.parse(sessionStorage.getItem("admin"))
   );
   const AddInternship = {
     domain: "",
@@ -126,7 +126,7 @@ const ServiceForm = () => {
                               color: "white",
                             }}
                           >
-                            <h3>Submit Model</h3>
+                            <h3>Submit</h3>
                           </button>
                         </fieldset>
                       </form>

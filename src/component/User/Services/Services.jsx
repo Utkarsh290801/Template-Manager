@@ -13,9 +13,9 @@ const Services = ({ filter }) => {
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(sessionStorage.getItem("user"))
   );
-
+  
   const handleApply = async (serviceId) => {
-    
+  
     const response = await fetch("http://localhost:5000/apply/add", {
       method: "POST",
       headers: {

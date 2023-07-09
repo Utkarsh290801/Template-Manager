@@ -12,7 +12,7 @@ const FooterInfo = ({data: {icon, info1, info2, id}}) => {
                 <FontAwesomeIcon icon={icon} className="fContactIcon"/>
                 <div>
                     <p className={`brnName${id}`}>{info1}</p>
-                    {info2 && <p>{info2}</p>}
+                    {info2 && <a href="mailto:rightpathpredictor@gmail.com" > <p>{info2}</p></a>}
                 </div>
             </div>
         </Col>

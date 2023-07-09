@@ -90,7 +90,7 @@ const InternshipApply = () => {
         Swal.fire({
           icon: "success",
           title: "Well done!",
-          text: "You have successfully updated your details.",
+          text: "You have successfully applied for this internship.",
         });
         navigate("/");
       })

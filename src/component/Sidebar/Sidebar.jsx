@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import "./Sidebar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faList, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faFile, faHome, faList, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
 const Sidebar = ({ setTitle }) => {
   return (
@@ -29,19 +29,19 @@ const Sidebar = ({ setTitle }) => {
               exact
               to="/"
             >
-              <FontAwesomeIcon icon={faUserCircle} className="iconC" />
+              <FontAwesomeIcon icon={faHome} className="iconC" />
               Home
             </NavLink>
           </li>
           <li>
             <NavLink
-              onClick={() => setTitle("Profile")}
+              onClick={() => setTitle("Edit Profile")}
               activeclassname="activePage"
               exact
-              to="/dashboard/profile"
+              to="/dashboard/edit"
             >
               <FontAwesomeIcon icon={faUserCircle} className="iconC" />
-              Profile
+              Edit Profile
             </NavLink>
           </li>
           <li>
@@ -51,7 +51,7 @@ const Sidebar = ({ setTitle }) => {
               exact
               to="/user/service"
             >
-              <FontAwesomeIcon icon={faUserCircle} className="iconC" />
+              <FontAwesomeIcon icon={faFile} className="iconC" />
               Internship Domain
             </NavLink>
           </li>

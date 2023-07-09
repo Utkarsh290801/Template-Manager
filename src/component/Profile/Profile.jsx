@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Col } from "react-bootstrap";
 import "./Profile.css";
 // import userimg from "../../Assets/images/user.svg";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
 import Swal from "sweetalert2";
 
@@ -70,25 +70,28 @@ const Profile = () => {
               </p>
             </> */}
             {appliedStatus !== null ? (
-              <>
-                {appliedStatus.map((status, index) => (
+              Array.isArray(appliedStatus) && appliedStatus.length > 0 ? (
+                appliedStatus.map((status, index) => (
                   <div key={index}>
-                    {" "}
-                    <span style={{ fontWeight: "bold" }}>
-                      {" "}
-                      Applied on :-{" "}
-                    </span>{" "}
+                    <span style={{ fontWeight: "bold" }}>Applied on: </span>
                     {status}
                   </div>
-                ))}
-              </>
+                ))
+              ) : (
+                <p>Applied Status: Not applied</p>
+              )
             ) : (
-              <p>Applied Status: Not applied</p>
+              <p>Loading...</p>
             )}
+            <div className="d-flex justify-content-around">
+              {/* <NavLink className="mainBtn mt-3" to="/dashboard/edit">
+                Edit Profile
+              </NavLink> */}
 
-            <button className="mainBtn mt-3" onClick={logout}>
-              Log out
-            </button>
+              <button className="mainBtn mt-3" onClick={logout}>
+                Log out
+              </button>
+            </div>
           </div>
         </div>
       </Col>

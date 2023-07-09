@@ -15,6 +15,8 @@ import InternshipApply from "./component/User/Services/InternshipApply";
 import User from "./component/User";
 import Contact from "./component/User/Contact/Contact";
 import About from "./component/About/About";
+import Admin from "./component/Admin";
+
 function App() {
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(sessionStorage.getItem("user"))
@@ -26,14 +28,17 @@ function App() {
           <Routes>
             <Route path="" element={<Banner />} />
             <Route path="/login" element={<LoginModal />} />
+
             <Route
-              path="addservice"
               element={
                 <AdminAuthorisor>
-                  <ServiceForm />
+                  <Admin />
                 </AdminAuthorisor>
               }
-            />
+              path="admin"
+            >
+              <Route element={<ServiceForm />} path="addservice" />
+            </Route>
             <Route path="reset" element={<ResetPassword />} />
             <Route element={<NotFound></NotFound>} path="notfound" />
             <Route
