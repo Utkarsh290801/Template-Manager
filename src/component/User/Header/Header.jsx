@@ -60,8 +60,13 @@ const Header = () => {
                 </NavLink>
               </li>
               <li class="nav-item">
+                <NavLink className="nav-link" to="/dashboard/profile">
+                 Dashboard
+                </NavLink>
+              </li>
+              <li class="nav-item">
                 <NavLink className="nav-link" to="/user/about">
-             About Us
+                  About Us
                 </NavLink>
               </li>
               <li class="nav-item">
@@ -76,9 +81,6 @@ const Header = () => {
 
           {/* <!-- Right elements --> */}
           <div class="d-flex align-items-center">
-       
-
-      
             {/* <!-- Avatar --> */}
             <div class="dropdown">
               <a
@@ -101,15 +103,14 @@ const Header = () => {
                 class="dropdown-menu dropdown-menu-end"
                 aria-labelledby="navbarDropdownMenuAvatar"
               >
-              
                 <li>
                   <a class="dropdown-item" href="/dashboard/profile">
-                     Dashboard
+                    Dashboard
                   </a>
                 </li>
-             
+
                 <li>
-                  <a class="dropdown-item" onClick={logout} >
+                  <a class="dropdown-item" onClick={logout}>
                     Logout
                   </a>
                 </li>

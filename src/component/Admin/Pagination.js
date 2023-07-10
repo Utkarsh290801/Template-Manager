@@ -34,7 +34,6 @@ const Pagination = ({ showPerPage, onPaginationChange, total }) => {
   return (
     <div>
       <div className="d-flex justify-content-between">
-   
         <div>
           <button
             className="btn btn-primary"
@@ -44,7 +43,7 @@ const Pagination = ({ showPerPage, onPaginationChange, total }) => {
             Previous
           </button>
         </div>
-             <div>
+        <div>
           Page {counter} of {numPages}
         </div>
         <div>

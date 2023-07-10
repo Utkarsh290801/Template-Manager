@@ -91,7 +91,7 @@ const Drawer = styled(MuiDrawer, {
 // Change Here
 export default function Sidebar({ children, options, title }) {
   const settings = [
-    { name: "Profile", link: "/user/userrprofile" },
+    { name: "Profile", link: "/admin/profile" },
     // { name: "Account", link: "/user/accounts" },
     // { name: "Logout", link: "/" },
   ];

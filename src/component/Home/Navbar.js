@@ -5,17 +5,29 @@ import PopOver from "../PopOver/PopOver";
 
 const Navbar = ({ setFilter }) => {
   const { loggedIn, setloggedIn } = useContext(AppContext);
-
+  const [adminData, setAdminData] = useState(null);
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
   };
+  useEffect(() => {
+    const checkSession = () => {
+      const adminData = JSON.parse(sessionStorage.getItem("admin"));
+      const userData = JSON.parse(sessionStorage.getItem("user"));
+      setAdminData(adminData);
+      if (adminData || userData) {
+        setloggedIn(true);
+      } else {
+        setloggedIn(false);
+      }
+    };
 
+    checkSession();
+  }, [setloggedIn]);
   return (
     <div>
-      <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
-        <div class="container-fluid">
-          {/* <i class="fa-solid fa-bars"></i> */}
-          <a class="navbar-brand me-2" href="">
+      <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <div className="container-fluid">
+          <a className="navbar-brand me-2" href="/">
             <img
               src="https://rightpathpredictor.in/sisotcha/2023/04/RPP-300x292.jpg"
               height="56"
@@ -35,7 +47,6 @@ const Navbar = ({ setFilter }) => {
             >
               Right Path Predictor
             </h5>
-
             <small
               className=""
               style={{ color: "#f7cc53", fontWeight: "bold", fontSize: "1rem" }}
@@ -44,7 +55,7 @@ const Navbar = ({ setFilter }) => {
             </small>
           </div>
           <button
-            class="navbar-toggler"
+            className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarExample01"
@@ -52,66 +63,82 @@ const Navbar = ({ setFilter }) => {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <i class="fa-solid fa-bars"></i>
+            <i className="fa-solid fa-bars"></i>
           </button>
 
-          <div class="collapse navbar-collapse" id="navbarExample01">
+          <div className="collapse navbar-collapse" id="navbarExample01">
             <form
-              class="input-group  mx-auto d-none d-sm-flex"
+              className="input-group mx-auto d-none d-sm-flex"
               style={{ width: "35%" }}
             >
               <input
-                autocomplete="off"
+                autoComplete="off"
                 type="search"
-                class="form-control rounded"
+                className="form-control rounded"
                 placeholder="Search internships"
                 style={{ minWidth: "165px" }}
                 onChange={handleFilterChange}
               />
             </form>
-            <ul class="navbar-nav ms-auto mb-lg-0">
-              <div className="ms-auto d-flex align-items-center justify-content-center ">
-                <li className="nav-item ">
-                  <a
-                    href="#about"
-                    style={{ color: "#7355F7" ,fontWeight:"bold"}}
-                    className="d-none d-sm-block"
-                  >
-                    &nbsp; &nbsp;About Us &nbsp; &nbsp;
-                  </a>
-                </li>
+            <ul className="navbar-nav ms-auto mb-lg-0">
+              <li className="nav-item">
+                <NavLink
+                  to="/about"
+                  style={{ color: "#7355F7", fontWeight: "bold" }}
+                  className="nav-link"
+                >
+                  About Us
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink
+                  to="/services"
+                  style={{ color: "#7355F7", fontWeight: "bold" }}
+                  className="nav-link"
+                >
+                  Internship Domain
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink
+                  to="/contact"
+                  style={{ color: "#7355F7", fontWeight: "bold" }}
+                  className="nav-link"
+                >
+                  Contact Us
+                </NavLink>
+              </li>
+              {loggedIn && (
                 <li className="nav-item">
-                  <a href="#services" style={{ color: "#7355F7",fontWeight:"bold" }}>
-                    Internship Domain{" "}
-                  </a>
+                  {adminData ? (
+                    <NavLink
+                      to="/admin/profile"
+                      style={{ color: "#7355F7", fontWeight: "bold" }}
+                      className="nav-link"
+                    >
+                      Admin
+                    </NavLink>
+                  ) : (
+                    <NavLink
+                      to="/dashboard/profile"
+                      style={{ color: "#7355F7", fontWeight: "bold" }}
+                      className="nav-link"
+                    >
+                      Dashboard
+                    </NavLink>
+                  )}
                 </li>
-
-                <li className="nav-item">
-                  <a href="#contact" style={{ color: "#7355F7" ,fontWeight:"bold"}}>
-                    {" "}
-                    &nbsp; &nbsp;Contact Us &nbsp; &nbsp;
-                  </a>
-                </li>
-                {loggedIn ? (
-                  <>
-                    <li className="nav-item">
-                      <NavLink to="/dashboard/profile" style={{ color: "#7355F7" ,fontWeight:"bold"}} >Dashboard</NavLink>
-                    </li>
-                  </>
-                ) : null}
-              </div>
-              <li class="nav-item active">
+              )}
+              <li className="nav-item">
                 {!loggedIn ? (
                   <NavLink
-                    className="btn btn-outline-primary btn-lg m-2 "
+                    className="btn btn-outline-primary btn-lg m-2"
                     to="/login"
                   >
                     Login
                   </NavLink>
                 ) : (
-                  <>
-                    <PopOver />
-                  </>
+                  <PopOver />
                 )}
               </li>
             </ul>

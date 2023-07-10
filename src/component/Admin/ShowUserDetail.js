@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { MDBCardImage } from "mdb-react-ui-kit";
+import { Switch } from "@mui/material";
 
-const ShowUserDetail = ({ selUser, setShowUpdateForm, deleteUser }) => {
+const ShowUserDetail = ({
+  selUser,
+  setShowUpdateForm,
+  deleteUser,
+  setShowUserDetailText,
+  changeStatusOfUser,
+  internshipData,
+}) => {
   const [loading, setLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(selUser.isAdmin);
+  const [isBlocked, setIsBlocked] = useState(selUser.isBlocked);
+  const url = "http://localhost:5000";
 
   useEffect(() => {
     setLoading(true);
 
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/user/getall");
+      const response = await fetch(url + "/user/getall");
       const data = await response.json();
 
       console.log(data);
@@ -18,6 +29,27 @@ const ShowUserDetail = ({ selUser, setShowUpdateForm, deleteUser }) => {
 
     fetchData();
   }, []);
+
+  const handleCancel = () => {
+    setShowUpdateForm(false);
+    setShowUserDetailText(true);
+  };
+
+  const handleAdminSwitchChange = async (e) => {
+    const newAdminStatus = e.target.checked;
+    setIsAdmin(newAdminStatus);
+    changeStatusOfUser(selUser._id, newAdminStatus, isBlocked);
+  };
+
+  const handleBlockedSwitchChange = async (e) => {
+    const newBlockedStatus = e.target.checked;
+    setIsBlocked(newBlockedStatus);
+    changeStatusOfUser(selUser._id, isAdmin, newBlockedStatus);
+  };
+  useEffect(() => {
+    setIsAdmin(selUser.isAdmin); // Update the isAdmin state when selUser changes
+    setIsBlocked(selUser.isBlocked);
+  }, [selUser]);
 
   return (
     <section className="h-100 gradient-custom-2 mt-4">
@@ -58,57 +90,193 @@ const ShowUserDetail = ({ selUser, setShowUpdateForm, deleteUser }) => {
             className="p-4 text-black"
             style={{ backgroundColor: "#f8f9fa" }}
           >
-            <div className="d-flex justify-content-end text-center py-1">
+            <div className="float-end text-center py-1">
               <div>
+                {" "}
                 <p className="small text-muted mb-0">
                   <b>Created At:</b> {selUser.createdAt}
                 </p>
               </div>
-              <div></div>
-            </div>
-          </div>
-          <div className="card-body p-4 text-black">
-            <div className="mb-5">
-              <p className="lead fw-normal mb-1">About</p>
-              <div className="p-4" style={{ backgroundColor: "#f8f9fa" }}>
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Full Name</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="font-italic mb-0">{selUser.username}</p>
-                  </div>
+              <div className="d-flex justify-content-around align-items-center">
+                <div>
+                  <Switch
+                    checked={isAdmin}
+                    onChange={handleAdminSwitchChange}
+                  />
+                  <p className="small text-muted mb-0">
+                    <b>Admin: </b> {isAdmin ? "Yes" : "No"}
+                  </p>
                 </div>
-                <hr></hr>
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">E-mail</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="font-italic mb-0">{selUser.email}</p>
-                  </div>
+                <div className="">
+                  <Switch
+                    checked={isBlocked}
+                    onChange={handleBlockedSwitchChange}
+                  />
+                  <p className="small text-muted mb-0 ">
+                    <b>Blocked: </b> {isBlocked ? "Yes" : "No"}
+                  </p>
                 </div>
-                <hr></hr>
-                <div className="row">
-                  <div className="col-sm-3">
-                    <p className="mb-0">Password</p>
-                  </div>
-                  <div className="col-sm-9">
-                    <p className="font-italic mb-0">{selUser.password}</p>
-                  </div>
-                </div>
-                <hr></hr>
-                <button
-                  onClick={(e) => setShowUpdateForm(false)}
-                  color="error"
-                  variant="contained"
-                  className="w-100 mt-3"
-                >
-                  Cancel
-                </button>
               </div>
             </div>
           </div>
+          {internshipData
+            .filter((data) => data.user === selUser._id)
+            .map((data) => (
+              <div className="card-body p-4 text-black" key={data._id}>
+                <div className="mb-5">
+                  <p className="lead fw-normal mb-1">About</p>
+                  <div className="p-4" style={{ backgroundColor: "#f8f9fa" }}>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">Full Name</p>
+                      </div>
+                      <div className="col-sm-9">
+                        <p className="font-italic mb-0">{selUser.username}</p>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">E-mail</p>
+                      </div>
+                      <div className="col-sm-9">
+                        <p className="font-italic mb-0">{selUser.email}</p>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">Mobile Number</p>
+                      </div>
+                      <div className="col-sm-9">
+                        <p className="font-italic mb-0">{data.number}</p>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">Password</p>
+                      </div>
+                      <div className="col-sm-9">
+                        <p className="font-italic mb-0">{selUser.password}</p>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">Gender</p>
+                      </div>
+                      <div className="col-sm-9">
+                        <p className="font-italic mb-0">{data.gender}</p>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">Applied Domain: </p>
+                      </div>
+                      <div className="col-sm-9">
+                        <ul className="list-unstyled">
+                          {data.domain.map((domainItem) => (
+                            <li key={domainItem}>{domainItem}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">College </p>
+                      </div>
+                      <div className="col-sm-9">
+                        <p className="font-italic mb-0">{data.college}</p>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">Course </p>
+                      </div>
+                      <div className="col-sm-9">
+                        <p className="font-italic mb-0">{data.course}</p>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">Stream </p>
+                      </div>
+                      <div className="col-sm-9">
+                        <p className="font-italic mb-0">{data.stream}</p>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">Github Profile </p>
+                      </div>
+                      <div className="col-sm-9">
+                        <p className="font-italic mb-0">
+                          {" "}
+                          <a
+                            href={data.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {data.github}
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">Linkedin Profile </p>
+                      </div>
+                      <div className="col-sm-9">
+                        <p className="font-italic mb-0">
+                          {" "}
+                          <a
+                            href={data.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {data.linkedin}
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">Passing Year </p>
+                      </div>
+                      <div className="col-sm-9">
+                        <p className="font-italic mb-0">{data.year}</p>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p className="mb-0">Resume </p>
+                      </div>
+                      <div className="col-sm-9">
+                        <p className="font-italic mb-0">{data.resume}</p>
+                      </div>
+                    </div>
+                    <hr></hr>
+                    <button
+                      onClick={handleCancel}
+                      color="error"
+                      variant="contained"
+                      className="w-100 mt-3"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
         </div>
       </div>
     </section>

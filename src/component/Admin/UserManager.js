@@ -4,12 +4,12 @@ import ShowUserDetail from "./ShowUserDetail";
 import { MDBCardImage } from "mdb-react-ui-kit";
 import { IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-
 import Pagination from "./Pagination";
-const url = "http://localhost:5000";
-
+import "./UserManager.css";
 const UserManager = () => {
+  const url = "http://localhost:5000";
   const [userArray, setUserArray] = useState([]);
+  const [InternshipDataArray, setInternshipDataArray] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("");
   const [showUpdateForm, setShowUpdateForm] = useState(false);
@@ -17,15 +17,16 @@ const UserManager = () => {
   const [pagination, setPagination] = useState({ start: 0, end: showPerPage });
   const [selUser, setSelUser] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
-
+  const [showUserDetailText, setShowUserDetailText] = useState(true);
   const updateUser = (user) => {
     console.log(user.curr);
     setSelUser(user.curr);
     setShowUpdateForm(true);
+    setShowUserDetailText(false);
   };
 
   const onPaginationChange = (start, end) => {
-    console.log(start, end);
+    // console.log(start, end);
     setPagination({ start: start, end: end });
   };
 
@@ -35,7 +36,6 @@ const UserManager = () => {
     const fetchData = async () => {
       const response = await fetch(url + "/user/getall");
       const data = await response.json();
-
       console.log(data);
       setUserArray(data);
       setSearchResults(data);
@@ -48,13 +48,47 @@ const UserManager = () => {
     // Fetch data every 5 seconds
     setInterval(fetchData, 5000);
   };
-
+  const changeStatusOfUser = async (id, isAdmin , isBlocked) => {
+    try {
+      const response = await fetch(url + "/user/update/" + id, {
+        method: "PUT",
+        body: JSON.stringify({ isAdmin, isBlocked }),
+        headers: { "Content-Type": "application/json" },
+      });
+      if (response.status === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "User status updated successfully",
+        });
+        // Update the isAdmin value in the selected user object
+        setSelUser((prevUser) => ({ ...prevUser, isAdmin, isBlocked }));
+      } else {
+        throw new Error("Failed to update user status");
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to update user status",
+      });
+    }
+  };
+  const getInternshipDatafromBackend = async () => {
+    const response = await fetch(url + "/apply/getall");
+    const data = await response.json();
+    console.log(data);
+    setInternshipDataArray(data);
+  };
+  useEffect(() => {
+    getInternshipDatafromBackend();
+  }, []);
   const deleteUser = async (id) => {
     console.log(id);
     const response = await fetch("http://localhost:5000/user/delete/" + id, {
       method: "DELETE",
     });
-
     if (response.status === 200) {
       Swal.fire({
         icon: "success",
@@ -126,7 +160,6 @@ const UserManager = () => {
           </Paper>
         </div>
       </div>
-
       <div className="card mb-3">
         <div className="row">
           <div className="col-md-5">
@@ -151,6 +184,9 @@ const UserManager = () => {
                   {searchResults
                     .slice(pagination.start, pagination.end)
                     .map((curr) => {
+                      const isAdmin = curr.isAdmin;
+                      const isBlocked = curr.isBlocked;
+                      const rowClass = isAdmin ? "admin-row" : isBlocked ? "blocked-row" : "";
                       if (loading) {
                         return (
                           <tr key={curr._id}>
@@ -168,7 +204,7 @@ const UserManager = () => {
                         );
                       } else {
                         return (
-                          <tr key={curr._id}>
+                          <tr key={curr._id} className={rowClass}>
                             <td>
                               <div className="d-flex align-items-center">
                                 <MDBCardImage
@@ -206,9 +242,22 @@ const UserManager = () => {
                 <div className="col-md">
                   <ShowUserDetail
                     selUser={selUser}
+                    setSelUser={setSelUser}
                     setShowUpdateForm={setShowUpdateForm}
                     deleteUser={deleteUser}
+                    setShowUserDetailText={setShowUserDetailText}
+                    changeStatusOfUser={changeStatusOfUser}
+                    internshipData={InternshipDataArray}
                   />
+                </div>
+              )}
+              {showUserDetailText && ( // Display the initial message
+                <div className="col-md text-center mt-5">
+                  <h3 className="headerTitle">
+                    Click on the{" "}
+                    <span className="headerHighlight">"View Details"</span>{" "}
+                    button to get the user details.
+                  </h3>
                 </div>
               )}
             </div>

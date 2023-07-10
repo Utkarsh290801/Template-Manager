@@ -70,7 +70,7 @@ const InternshipApply = () => {
         title: "Warning",
         text: "You have already applied for this internship.",
       });
-      navigate("/");
+      navigate("/dashboard/profile");
       return;
     }
     updatedValues.domain.push(modelData.domain); // Add the selected domain to the array
@@ -92,7 +92,7 @@ const InternshipApply = () => {
           title: "Well done!",
           text: "You have successfully applied for this internship.",
         });
-        navigate("/");
+        navigate("/dashboard/profile");
       })
       .catch((error) => {
         console.error("Error updating details:", error);
@@ -241,7 +241,7 @@ const InternshipApply = () => {
                             <input
                               type="radio"
                               name="gender"
-                              value="male"
+                              value="Male"
                               checked={values.gender === "male"}
                               onChange={handleChange}
                             />{" "}
@@ -249,7 +249,7 @@ const InternshipApply = () => {
                             <input
                               type="radio"
                               name="gender"
-                              value="female"
+                              value="Female"
                               checked={values.gender === "female"}
                               onChange={handleChange}
                             />{" "}

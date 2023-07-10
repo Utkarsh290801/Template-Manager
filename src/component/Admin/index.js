@@ -18,6 +18,11 @@ const Admin = () => {
       icon: <ManageAccountsIcon />,
       link: "/admin/addservice",
     },
+    {
+      name: "User Manager",
+      icon: <ManageAccountsIcon />,
+      link: "/admin/manageuser",
+    },
     // {
     //   name: "Manage Query",
     //   icon: <QueryStatsIcon />,

@@ -17,6 +17,7 @@ import Contact from "./component/User/Contact/Contact";
 import About from "./component/About/About";
 import Admin from "./component/Admin";
 import UserManager from "./component/Admin/UserManager";
+import Profile from "./component/Admin/Profile";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(
@@ -38,7 +39,7 @@ function App() {
               }
               path="admin"
             >
-              
+              <Route element={<Profile />} path="profile" />
               <Route element={<UserManager />} path="manageuser" />
               <Route element={<ServiceForm />} path="addservice" />
             </Route>
