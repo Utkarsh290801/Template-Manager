@@ -24,7 +24,7 @@ const SignInForm = () => {
 
   const loginSubmit = async (formdata, { setSubmitting }) => {
     setSubmitting(true);
-  
+
     // Check if email exists
     const res = await fetch(url + "/user/checkemail/" + formdata.email);
     if (res.status === 200) {
@@ -36,7 +36,7 @@ const SignInForm = () => {
           "Content-Type": "application/json",
         },
       });
-  
+
       if (response.status === 200) {
         // Login success
         console.log(response.status);
@@ -51,8 +51,17 @@ const SignInForm = () => {
         setloggedIn(true);
         if (data.isAdmin) {
           sessionStorage.setItem("admin", JSON.stringify(data));
-          navigate("/admin/addservice");
+          navigate("/admin/profile");
         } else {
+          if (data.isBlocked) {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Your account has been blocked by the admin.",
+            });
+            setSubmitting(false);
+            return;
+          }
           navigate("/");
           sessionStorage.setItem("user", JSON.stringify(data));
         }
@@ -87,7 +96,6 @@ const SignInForm = () => {
     }
     setSubmitting(false);
   };
-  
 
   // ...
 

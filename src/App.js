@@ -18,6 +18,7 @@ import About from "./component/About/About";
 import Admin from "./component/Admin";
 import UserManager from "./component/Admin/UserManager";
 import Profile from "./component/Admin/Profile";
+import ViewDomainList from "./component/Admin/ViewDomainList";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(
@@ -39,6 +40,7 @@ function App() {
               }
               path="admin"
             >
+              <Route element={<ViewDomainList/>} path="viewdomain" />
               <Route element={<Profile />} path="profile" />
               <Route element={<UserManager />} path="manageuser" />
               <Route element={<ServiceForm />} path="addservice" />

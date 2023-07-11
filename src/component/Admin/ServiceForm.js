@@ -1,31 +1,67 @@
-import { FormControl, InputLabel, MenuItem, TextField } from "@mui/material";
-import { Formik } from "formik";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
-const ServiceForm = () => {
+import { Formik } from "formik";
+import { TextField, Button } from "@mui/material";
+
+const ServiceForm = ({
+  updateFormData,
+  setShowUpdateForm,
+  getDataFromBackend,
+}) => {
   const url = "http://localhost:5000";
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(
     JSON.parse(sessionStorage.getItem("admin"))
   );
   const AddInternship = {
-    domain: "",
-    location: "",
-    duration: "",
-    position: "",
+    domain: updateFormData ? updateFormData.domain : "",
+    location: updateFormData ? updateFormData.location : "",
+    duration: updateFormData ? updateFormData.duration : "",
+    position: updateFormData ? updateFormData.position : "",
     uploadedBy: currentUser.username,
   };
+
   const formSchema = Yup.object().shape({
     domain: Yup.string().required("Required"),
-
     duration: Yup.string().required("Required"),
     position: Yup.string().required("Required"),
     location: Yup.string().required("Required"),
   });
+
+  const updateSubmit = async (formdata) => {
+    console.log(formdata);
+
+    const response = await fetch(
+      `http://localhost:5000/service/update/${updateFormData._id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(formdata),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      console.log("success");
+      Swal.fire({
+        icon: "success",
+        title: "Updated",
+        text: "User Details updated!!",
+      });
+      getDataFromBackend();
+      setShowUpdateForm(false);
+    } else {
+      console.log(response.status);
+      console.log("something went wrong");
+    }
+  };
+
   const addSubmit = async (formdata) => {
     console.log(formdata);
+
     const response = await fetch("http://localhost:5000/service/add", {
       method: "POST",
       body: JSON.stringify(formdata),
@@ -33,6 +69,7 @@ const ServiceForm = () => {
         "Content-Type": "application/json",
       },
     });
+
     if (response.status === 200) {
       console.log(response.status);
       console.log("success");
@@ -54,6 +91,9 @@ const ServiceForm = () => {
       });
     }
   };
+  const handleCloseForm = () => {
+    setShowUpdateForm(false);
+  };
 
   return (
     <div
@@ -66,10 +106,12 @@ const ServiceForm = () => {
             <div className="card">
               <div className="card-body">
                 <div className="card-body">
-                  <h3>Create Internship</h3>
+                  <h3>
+                    {updateFormData ? "Update Internship" : "Create Internship"}
+                  </h3>
                   <Formik
                     initialValues={AddInternship}
-                    onSubmit={addSubmit}
+                    onSubmit={updateFormData ? updateSubmit : addSubmit}
                     validationSchema={formSchema}
                   >
                     {({
@@ -100,6 +142,7 @@ const ServiceForm = () => {
                             helperText={touched.position ? errors.position : ""}
                             error={Boolean(errors.position && touched.position)}
                           />
+
                           <TextField
                             label="Location"
                             id="location"
@@ -109,6 +152,7 @@ const ServiceForm = () => {
                             helperText={touched.location ? errors.location : ""}
                             error={Boolean(errors.location && touched.location)}
                           />
+
                           <TextField
                             label="Duration"
                             id="duration"
@@ -119,15 +163,26 @@ const ServiceForm = () => {
                             error={Boolean(errors.duration && touched.duration)}
                           />
 
-                          <button
-                            className="btn w-100 mt-4 "
+                          <Button
+                            variant="contained"
+                            type="submit"
+                            className="w-100 mt-4"
                             style={{
                               backgroundColor: "#7355F7",
                               color: "white",
                             }}
                           >
-                            <h3>Submit</h3>
-                          </button>
+                            <h3>{updateFormData ? "Update" : "Submit"}</h3>
+                          </Button>
+                          {updateFormData && (
+                            <Button
+                              variant="contained"
+                              className="w-100 mt-3"
+                              onClick={handleCloseForm}
+                            >
+                              <h3>Close</h3>
+                            </Button>
+                          )}  
                         </fieldset>
                       </form>
                     )}

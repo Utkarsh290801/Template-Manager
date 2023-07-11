@@ -50,6 +50,24 @@ const ShowUserDetail = ({
     setIsAdmin(selUser.isAdmin); // Update the isAdmin state when selUser changes
     setIsBlocked(selUser.isBlocked);
   }, [selUser]);
+  const handleDownload = (e, fileName) => {
+    e.preventDefault();
+    fetch(`http://localhost:5000/${fileName}`)
+      .then((response) => response.blob())
+      .then((blob) => {
+        // Create a temporary URL object to generate the download link
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", fileName); // Set the filename for the download
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+      })
+      .catch((error) => {
+        console.error("Error downloading file:", error);
+      });
+  };
 
   return (
     <section className="h-100 gradient-custom-2 mt-4">
@@ -260,8 +278,24 @@ const ShowUserDetail = ({
                       <div className="col-sm-3">
                         <p className="mb-0">Resume </p>
                       </div>
-                      <div className="col-sm-9">
-                        <p className="font-italic mb-0">{data.resume}</p>
+                      <div className="col-sm-9 d-flex justify-content-around">
+                        <p className="font-italic mb-0">
+                          {" "}
+                          <a
+                            href={`http://localhost:5000/${data.resume}`}
+                            target="_blank"
+                            download
+                            rel="noopener noreferrer"
+                          >
+                            View Resume
+                          </a>
+                        </p>
+                        <a
+                          href={`http://localhost:5000/${data.resume}`}
+                          onClick={(e) => handleDownload(e, data.resume)}
+                        >
+                          Download Resume
+                        </a>
                       </div>
                     </div>
                     <hr></hr>

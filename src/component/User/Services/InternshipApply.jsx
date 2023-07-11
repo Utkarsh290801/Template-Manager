@@ -37,7 +37,7 @@ const InternshipApply = () => {
     stream: "",
     college: "",
     year: "",
-    resume: "",
+    resume: applyData?.resume || resumeUrl,
     appliedBy: currentUser?.email || "",
     domain: [],
   };
@@ -62,6 +62,7 @@ const InternshipApply = () => {
     setIsLoading(true);
     const updatedValues = {
       ...values,
+      resume: resumeUrl,
       domain: [...values.domain], // Add the selected domain to the array
     };
     if (values.domain.includes(modelData.domain)) {
@@ -242,7 +243,7 @@ const InternshipApply = () => {
                               type="radio"
                               name="gender"
                               value="Male"
-                              checked={values.gender === "male"}
+                              checked={values.gender === "Male"}
                               onChange={handleChange}
                             />{" "}
                             Male
@@ -250,7 +251,7 @@ const InternshipApply = () => {
                               type="radio"
                               name="gender"
                               value="Female"
-                              checked={values.gender === "female"}
+                              checked={values.gender === "Female"}
                               onChange={handleChange}
                             />{" "}
                             Female
@@ -365,23 +366,26 @@ const InternshipApply = () => {
                             name="resume"
                             className="internship-input"
                             onChange={uploadFile}
+                            required
                           />
                         </div>
                       </div>
                       {errors.resume && touched.resume && (
                         <div className="error">{errors.resume}</div>
                       )}
-                      {resumeUrl && (
+                      {resumeUrl || applyData?.resume ? (
                         <div className="mt-4" style={{ float: "left" }}>
                           <a
-                            href={`http://localhost:5000/${resumeUrl}`}
+                            href={`http://localhost:5000/${
+                              resumeUrl || applyData?.resume
+                            }`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
                             View Resume
                           </a>
                         </div>
-                      )}
+                      ) : null}
                       <div class="button_container">
                         <button type="submit">Apply Now</button>
                       </div>

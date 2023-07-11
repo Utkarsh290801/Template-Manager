@@ -80,33 +80,33 @@ const Navbar = ({ setFilter }) => {
                 onChange={handleFilterChange}
               />
             </form>
-            <ul className="navbar-nav ms-auto mb-lg-0">
+            <ul className="navbar-nav ms-auto mb-lg-0 ">
               <li className="nav-item">
-                <NavLink
-                  to="/about"
+                <a
+                  href="#about"
                   style={{ color: "#7355F7", fontWeight: "bold" }}
-                  className="nav-link"
+                  className=" nav-link"
                 >
                   About Us
-                </NavLink>
+                </a>
               </li>
               <li className="nav-item">
-                <NavLink
-                  to="/services"
+                <a
+                  href="#services"
                   style={{ color: "#7355F7", fontWeight: "bold" }}
                   className="nav-link"
                 >
                   Internship Domain
-                </NavLink>
+                </a>
               </li>
               <li className="nav-item">
-                <NavLink
-                  to="/contact"
+                <a
+                  href="#contact"
                   style={{ color: "#7355F7", fontWeight: "bold" }}
                   className="nav-link"
                 >
                   Contact Us
-                </NavLink>
+                </a>
               </li>
               {loggedIn && (
                 <li className="nav-item">

@@ -23,6 +23,11 @@ const Admin = () => {
       icon: <ManageAccountsIcon />,
       link: "/admin/manageuser",
     },
+    {
+      name: "View Domain",
+      icon: <ManageAccountsIcon />,
+      link: "/admin/viewdomain",
+    },
     // {
     //   name: "Manage Query",
     //   icon: <QueryStatsIcon />,
